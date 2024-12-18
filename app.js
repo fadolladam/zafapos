@@ -2,7 +2,7 @@ const SHEET_ID = '1uwetY0HWt69NIcIBgEs7II94SUUd_UG6J5Sxe5uO-AM';
 const API_KEY = 'AIzaSyDytDPZlv8eA5N-XZiMzrj2BsSjYDNm_co';
 const SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/master?key=${API_KEY}`;
 const ORDER_HISTORY_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Order%20History?key=${API_KEY}`;
-const DEPLOYED_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1NooWEz3Yb-QvdQssF5HD8i9ldKPefJZHz_KYB7iyHTQJXYMCVzpR8JOHEV2CGIVi2g/exec';
+const DEPLOYED_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNk-UV6DHs1MQ1Tv1l8nmWatiA63iWRA_QWmIBY89fwkuGNIB4kglKh5bwB5UHoxH7dA/exec';
 
 let products = [];
 let cart = {};
@@ -127,6 +127,7 @@ function renderCart() {
     document.getElementById('total').textContent = `$${total.toFixed(2)}`;
 }
 
+
 // Place Order and Update Google Sheets
 async function placeOrderAndPrint() {
     if (Object.keys(cart).length === 0) {
@@ -134,17 +135,16 @@ async function placeOrderAndPrint() {
         return;
     }
 
-    const invoiceID = `INV-${Date.now()}`; // Generate unique Invoice ID
+    const invoiceID = `INV-${Date.now()}`;
     const currentDate = new Date().toLocaleString();
 
-    // Prepare stock updates
+    // Prepare stock updates for each product
     const updates = Object.values(cart).map(item => ({
-        rowIndex: item.rowIndex,   // Correct row index in Google Sheet
-        newStock: item.stock       // Updated stock count
+        rowIndex: item.rowIndex, // Row in the master sheet
+        newStock: item.stock // Updated stock after deduction
     }));
 
-
-    // Prepare order history for Google Sheets
+    // Prepare order history data
     const orderHistory = Object.values(cart).map(item => ({
         invoiceID,
         date: currentDate,
@@ -155,29 +155,21 @@ async function placeOrderAndPrint() {
     }));
 
     try {
-        // Send updates to the Google Apps Script
-        await fetch(DEPLOYED_SCRIPT_URL, {
+        // Send stock updates and order history to Google Apps Script
+        const response = await fetch(DEPLOYED_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors', // Required for Google Apps Script
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ updates, orderHistory })
         });
 
-        // Generate receipt
-        generateReceipt(invoiceID, currentDate);
-
-        // Reset cart and refresh product list
-        cart = {};
+        generateReceipt(invoiceID, currentDate); // Generate and display the receipt
+        cart = {}; // Clear the cart
         renderCart();
-        fetchProducts();
-
-        alert('Order placed successfully!');
-        window.print();
-
-        // Fetch updated order history
-        fetchOrderHistory();
+        fetchProducts(); // Refresh product stock from the sheet
+        alert("Order placed successfully! Stock updated.");
     } catch (error) {
-        console.error("Error saving order and updating stock:", error);
+        console.error("Error placing order:", error);
         alert("Failed to place order. Please try again.");
     }
 }

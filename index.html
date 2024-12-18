@@ -15,7 +15,6 @@
         <div class="flex flex-col md:flex-row">
             <!-- Left Section: Product Grid -->
             <div class="w-full md:w-3/5 pr-4 border-r mb-6 md:mb-0">
-                <!-- Header -->
                 <div class="flex items-center justify-between mb-4">
                     <div class="text-sm text-gray-600 flex space-x-2 items-center">
                         <span id="current-date" class="bg-blue-100 text-blue-500 px-3 py-1 rounded-full font-semibold"></span>
@@ -24,109 +23,84 @@
                     <button class="text-red-500 font-semibold hover:text-red-600">● Close Order</button>
                 </div>
                 <!-- Category Tabs -->
-                <div class="flex space-x-2 mb-4">
-                    <button id="all-menu" class="bg-blue-500 text-white px-4 py-2 rounded-full font-semibold shadow-md">All Menu</button>
-                    <button id="breads" class="bg-gray-200 px-4 py-2 rounded-full font-semibold">Breads</button>
-                    <button id="cakes" class="bg-gray-200 px-4 py-2 rounded-full font-semibold">Cakes</button>
-                    <button id="donuts" class="bg-gray-200 px-4 py-2 rounded-full font-semibold">Donuts</button>
-                    <button id="pastries" class="bg-gray-200 px-4 py-2 rounded-full font-semibold">Pastries</button>
-                    <button id="sandwich" class="bg-gray-200 px-4 py-2 rounded-full font-semibold">Sandwich</button>
-                </div>
+                <div id="category-tabs" class="flex space-x-2 mb-4"></div>
                 <!-- Search -->
                 <div class="mb-4">
-                    <input type="text" id="search" placeholder="Search something sweet on your mind..." class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none">
+                    <input type="text" id="search" placeholder="Search products..." class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <!-- Product Grid -->
-                <div id="products" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <!-- Products will render here -->
-                </div>
+                <div id="products" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
             </div>
             <!-- Right Section: Cart -->
             <div class="w-full md:w-2/5 pl-4">
-                <!-- Customer Info -->
                 <div class="bg-gray-100 rounded-3xl p-4 mb-4">
                     <h2 class="text-lg font-semibold mb-2">Customer's Name</h2>
                     <p class="text-sm text-gray-500">Order Number: #000</p>
-                    <div class="flex mt-2 space-x-2">
-                        <select class="w-1/2 px-4 py-2 border rounded-full text-sm">
-                            <option value="" disabled selected>Select Table</option>
-                            <option value="1">Table 1</option>
-                            <option value="2">Table 2</option>
-                            <option value="3">Table 3</option>
-                        </select>
-                        <select class="w-1/2 px-4 py-2 border rounded-full text-sm">
-                            <option value="" disabled selected>Order Type</option>
-                            <option value="Dine In">Dine In</option>
-                            <option value="Take Away">Take Away</option>
-                        </select>
-                    </div>
                 </div>
-                <div id="cart-items" class="h-64 overflow-y-auto mb-4">
-                    <!-- Cart items will appear here -->
-                </div>
+                <div id="cart-items" class="h-64 overflow-y-auto mb-4"></div>
                 <div>
                     <div class="flex justify-between">
-                        <span>Subtotal:</span>
-                        <span id="subtotal">$0.00</span>
+                        <span>Subtotal:</span> <span id="subtotal">$0.00</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Tax 10%:</span>
-                        <span id="tax">$0.00</span>
+                        <span>Tax 10%:</span> <span id="tax">$0.00</span>
                     </div>
                     <div class="flex justify-between font-bold text-lg">
-                        <span>Total:</span>
-                        <span id="total">$0.00</span>
+                        <span>Total:</span> <span id="total">$0.00</span>
                     </div>
                 </div>
-                <!-- Actions -->
                 <div class="mt-4 space-y-2">
-                    <button class="w-full px-4 py-2 bg-gray-200 rounded-full">Add Promo or Voucher</button>
-                    <button class="w-full px-4 py-2 bg-gray-800 text-white rounded-full">Payment Method</button>
-                    <button id="placeOrder" class="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded-full shadow hover:bg-blue-600">
-                        Place Order
+                    <button id="placeOrderAndPrint" onclick="placeOrderAndPrint()" class="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded-full shadow hover:bg-blue-600">
+                        Place Order & Print Receipt
                     </button>
-                    <!-- Receipt Template (Hidden) -->
-                    <div id="receipt" class="hidden w-[80mm] p-4 text-sm">
-                        <h2 class="text-center font-bold">YB Shop</h2>
-                        <p class="text-center">Date: <span id="receipt-date"></span></p>
-                        <hr class="my-2">
-                        <div id="receipt-items"></div>
-                        <hr class="my-2">
-                        <div class="flex justify-between">
-                            <span>Subtotal:</span> <span id="receipt-subtotal"></span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Tax:</span> <span id="receipt-tax"></span>
-                        </div>
-                        <div class="flex justify-between font-bold">
-                            <span>Total:</span> <span id="receipt-total"></span>
-                        </div>
-                        <hr class="my-2">
-                        <p class="text-center">Thank You!</p>
-                    </div>
-                    <!-- Print Receipt Button -->
-                    <button onclick="printReceipt()" class="w-full px-4 py-2 bg-blue-500 text-white rounded-full">
-                        Print Receipt
-                    </button>
+                </div>
+                <!-- Receipt Template (Hidden) -->
+                <div id="receipt" class="hidden w-[80mm] p-4 text-sm bg-white shadow-lg">
+                    <h2 class="text-center font-bold">YB Shop</h2>
+                    <p class="text-center">Invoice ID: <span id="receipt-invoice"></span></p>
+                    <p class="text-center">Date: <span id="receipt-date"></span></p>
+                    <hr class="my-2">
+                    <div id="receipt-items"></div>
+                    <hr class="my-2">
+                    <div class="flex justify-between"><span>Subtotal:</span> <span id="receipt-subtotal"></span></div>
+                    <div class="flex justify-between"><span>Tax:</span> <span id="receipt-tax"></span></div>
+                    <div class="flex justify-between font-bold"><span>Total:</span> <span id="receipt-total"></span></div>
+                    <hr class="my-2">
+                    <p class="text-center">Thank You!</p>
                 </div>
             </div>
         </div>
+        <!-- Order History -->
         <div class="my-6">
-    <h2 class="text-lg font-bold mb-4">Order History</h2>
-    <table class="w-full border-collapse" id="order-history">
-        <thead>
-            <tr>
-                <th class="border px-2 py-1">Date</th>
-                <th class="border px-2 py-1">Item</th>
-                <th class="border px-2 py-1">Quantity</th>
-                <th class="border px-2 py-1">Price</th>
-                <th class="border px-2 py-1">Total</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
-
+            <h2 class="text-lg font-bold mb-4">Order History</h2>
+            <div class="flex space-x-4 mb-4">
+                <input type="date" id="filter-date" class="border rounded px-2 py-1">
+                <input type="text" id="search-invoice" placeholder="Search Invoice ID" class="border rounded px-2 py-1">
+                <button onclick="fetchOrderHistory()" class="bg-blue-500 text-white px-4 py-1 rounded">Search</button>
+            </div>
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr>
+                        <th class="border px-2 py-1">Invoice ID</th>
+                        <th class="border px-2 py-1">Date</th>
+                        <th class="border px-2 py-1">Total</th>
+                        <th class="border px-2 py-1">Details</th>
+                    </tr>
+                </thead>
+                <tbody id="order-history"></tbody>
+            </table>
+        </div>
+        <!-- Order Details Modal -->
+        <div id="order-details-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+            <div class="bg-white rounded-lg shadow-lg w-1/2 p-6 relative">
+                <button onclick="closeModal()" class="absolute top-2 right-4 text-gray-600 font-bold text-xl">X</button>
+                <h2 class="text-center text-2xl font-bold mb-4">Invoice Details</h2>
+                <div id="order-details-content" class="text-gray-800"></div>
+                <div class="mt-4 text-center">
+                    <button onclick="closeModal()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="app.js"></script>
     <script>
@@ -134,14 +108,15 @@
     function updateDateTime() {
         const dateElement = document.getElementById('current-date');
         const timeElement = document.getElementById('current-time');
-
         const now = new Date();
 
-        // Format date: "Wed, 29 May 2024"
-        const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
-        dateElement.textContent = now.toLocaleDateString('en-US', options);
+        dateElement.textContent = now.toLocaleDateString('en-US', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
 
-        // Format time: "07:59 AM"
         timeElement.textContent = now.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
@@ -149,8 +124,6 @@
             hour12: true
         });
     }
-
-    // Update time every second
     setInterval(updateDateTime, 1000);
     updateDateTime();
     </script>

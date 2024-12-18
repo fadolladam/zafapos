@@ -45,35 +45,37 @@ async function placeOrder() {
         return;
     }
 
-    const updates = Object.values(cart).map(item => ({
-        rowIndex: item.rowIndex, // Row number
-        newStock: item.stock // Updated stock value
-    }));
+    // Prepare updates with final stock values
+    const updates = Object.values(cart).map(item => {
+        return {
+            rowIndex: item.rowIndex,
+            newStock: item.stock - item.quantity // Deduct quantity from actual stock
+        };
+    });
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzZYqoWPnCPpA1kvO5GNtaloEAi6ix4eoQFzZJzj3ryT9DceWdbePV4wIz6cttoECloXw/exec', { // Replace with the Web App URL
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzmppkIfbCVaHeArG15efLkAOHKULgM6kV10VPM1FGOkxSAC1Cl8-ZD1yeVo2PrrRkM4Q/exec', {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ updates })
         });
 
-        const data = await response.json();
+        // Update local product data to reflect the final stock
+        updates.forEach(update => {
+            const product = products.find(p => p.rowIndex === update.rowIndex);
+            if (product) product.stock = update.newStock;
+        });
 
-        if (data.success) {
-            alert("Order placed successfully! Stock updated.");
-            cart = {};
-            fetchProducts();
-            renderCart();
-        } else {
-            throw new Error(data.error);
-        }
+        alert("Order placed successfully! Stock updated.");
+        cart = {}; // Clear cart
+        renderProducts(); // Re-render products with updated stock
+        renderCart(); // Clear cart UI
     } catch (error) {
         console.error("Error updating stock:", error);
         alert("Failed to update stock. Please try again.");
     }
 }
-
 
 
 // Render Categories and Products (unchanged)
@@ -104,26 +106,33 @@ function renderProducts(category = 'All') {
     `).join('');
 }
 
+
 function setCategory(category) {
     renderProducts(category);
 }
 
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
-    if (product && product.stock > 0) {
-        product.stock--;
-        document.getElementById(`stock-${product.id}`).textContent = product.stock;
 
+    if (product && product.stock > 0) {
         if (!cart[productId]) {
-            cart[productId] = { ...product, quantity: 1 };
+            cart[productId] = { ...product, quantity: 1, reservedStock: product.stock - 1 };
         } else {
             cart[productId].quantity++;
+            cart[productId].reservedStock--; // Temporary display of reduced stock
         }
-        renderCart();
+
+        // Update UI: Display reserved stock in product list
+        document.getElementById(`stock-${product.id}`).textContent = cart[productId].reservedStock;
+
+        renderCart(); // Re-render cart
     } else {
-        alert('Out of stock!');
+        alert('Product is out of stock!');
     }
 }
+
+
+
 
 function renderCart() {
     const cartContainer = document.getElementById('cart-items');

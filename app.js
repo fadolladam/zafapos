@@ -45,42 +45,35 @@ async function placeOrder() {
         return;
     }
 
-    // Prepare updates for batchUpdate API
     const updates = Object.values(cart).map(item => ({
-        range: `master!F${item.rowIndex}`, // Column F for Stock Quantity
-        values: [[item.stock]] // New stock value
+        rowIndex: item.rowIndex, // Row number
+        newStock: item.stock // Updated stock value
     }));
 
-    const body = {
-        data: updates,
-        valueInputOption: 'USER_ENTERED'
-    };
-
-    console.log("Request Body:", JSON.stringify(body, null, 2)); // Log request for debugging
-
     try {
-        const response = await fetch(UPDATE_URL, {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzZYqoWPnCPpA1kvO5GNtaloEAi6ix4eoQFzZJzj3ryT9DceWdbePV4wIz6cttoECloXw/exec', { // Replace with the Web App URL
             method: 'POST',
+            mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
+            body: JSON.stringify({ updates })
         });
 
-        const responseData = await response.json();
-        console.log("API Response:", responseData); // Log response for debugging
+        const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error(responseData.error.message);
+        if (data.success) {
+            alert("Order placed successfully! Stock updated.");
+            cart = {};
+            fetchProducts();
+            renderCart();
+        } else {
+            throw new Error(data.error);
         }
-
-        alert("Order placed successfully! Stock updated.");
-        cart = {};
-        fetchProducts(); // Reload updated stock
-        renderCart();
     } catch (error) {
-        console.error("Error updating stock:", error.message);
-        alert("Failed to update stock. Check your permissions and API key.");
+        console.error("Error updating stock:", error);
+        alert("Failed to update stock. Please try again.");
     }
 }
+
 
 
 // Render Categories and Products (unchanged)

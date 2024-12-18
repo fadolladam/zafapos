@@ -234,3 +234,19 @@ h1, h2, h3 {
 .cart-items::-webkit-scrollbar-thumb:hover {
   background-color: #94a3b8;
 }
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #receipt, #receipt * {
+        visibility: visible;
+    }
+    #receipt {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80mm;
+        font-family: 'Courier New', Courier, monospace;
+    }
+}

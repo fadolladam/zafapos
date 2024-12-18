@@ -45,37 +45,35 @@ async function placeOrder() {
         return;
     }
 
-    // Prepare updates with final stock values
-    const updates = Object.values(cart).map(item => {
-        return {
-            rowIndex: item.rowIndex,
-            newStock: item.stock - item.quantity // Deduct quantity from actual stock
-        };
-    });
+    const updates = Object.values(cart).map(item => ({
+        rowIndex: item.rowIndex,
+        newStock: item.stock - item.quantity
+    }));
+
+    const orderHistory = Object.values(cart).map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+    }));
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzmppkIfbCVaHeArG15efLkAOHKULgM6kV10VPM1FGOkxSAC1Cl8-ZD1yeVo2PrrRkM4Q/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzI37hJ0FKboMSyFIfUAfnKAnkD5Yv2UDuwcqVBQjmER0t0MSiNhsxfKBFgZHoQ7DMqgQ/exec', {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ updates })
+            body: JSON.stringify({ updates, orderHistory })
         });
 
-        // Update local product data to reflect the final stock
-        updates.forEach(update => {
-            const product = products.find(p => p.rowIndex === update.rowIndex);
-            if (product) product.stock = update.newStock;
-        });
-
-        alert("Order placed successfully! Stock updated.");
+        alert("Order placed successfully! Stock updated and order saved.");
         cart = {}; // Clear cart
-        renderProducts(); // Re-render products with updated stock
-        renderCart(); // Clear cart UI
+        fetchProducts();
+        renderCart();
     } catch (error) {
-        console.error("Error updating stock:", error);
-        alert("Failed to update stock. Please try again.");
+        console.error("Error placing order:", error);
+        alert("Failed to place order. Please try again.");
     }
 }
+
 
 
 // Render Categories and Products (unchanged)
@@ -161,3 +159,56 @@ function renderCart() {
 
 document.getElementById('placeOrder').addEventListener('click', placeOrder);
 document.addEventListener('DOMContentLoaded', fetchProducts);
+
+function printReceipt() {
+    const now = new Date();
+    const formattedDate = now.toLocaleString();
+
+    // Populate receipt data
+    document.getElementById('receipt-date').textContent = formattedDate;
+
+    const receiptItems = Object.values(cart).map(item => `
+        <div class="flex justify-between">
+            <span>${item.name} x${item.quantity}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+        </div>
+    `).join('');
+    document.getElementById('receipt-items').innerHTML = receiptItems;
+
+    document.getElementById('receipt-subtotal').textContent = document.getElementById('subtotal').textContent;
+    document.getElementById('receipt-tax').textContent = document.getElementById('tax').textContent;
+    document.getElementById('receipt-total').textContent = document.getElementById('total').textContent;
+
+    // Show receipt, trigger print, and hide after print
+    const receipt = document.getElementById('receipt');
+    receipt.classList.remove('hidden');
+
+    window.print();
+
+    receipt.classList.add('hidden');
+}
+
+async function fetchOrderHistory() {
+    try {
+        const response = await fetch('https://sheets.googleapis.com/v4/spreadsheets/1uwetY0HWt69NIcIBgEs7II94SUUd_UG6J5Sxe5uO-AM/values/Order%20History?key=AIzaSyDytDPZlv8eA5N-XZiMzrj2BsSjYDNm_co');
+        const data = await response.json();
+
+        const rows = data.values.slice(1); // Skip headers
+        const historyContainer = document.querySelector('#order-history tbody');
+
+        historyContainer.innerHTML = rows.map(row => `
+            <tr>
+                <td class="border px-2 py-1">${row[0]}</td>
+                <td class="border px-2 py-1">${row[1]}</td>
+                <td class="border px-2 py-1">${row[2]}</td>
+                <td class="border px-2 py-1">$${row[3]}</td>
+                <td class="border px-2 py-1 font-bold">$${row[4]}</td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        console.error("Error fetching order history:", error);
+    }
+}
+
+// Call this function to load order history
+fetchOrderHistory();

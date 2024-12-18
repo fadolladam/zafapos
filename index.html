@@ -34,8 +34,7 @@
                 </div>
                 <!-- Search -->
                 <div class="mb-4">
-                    <input type="text" id="search" placeholder="Search something sweet on your mind..."
-                        class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none">
+                    <input type="text" id="search" placeholder="Search something sweet on your mind..." class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <!-- Product Grid -->
                 <div id="products" class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -83,39 +82,77 @@
                 <div class="mt-4 space-y-2">
                     <button class="w-full px-4 py-2 bg-gray-200 rounded-full">Add Promo or Voucher</button>
                     <button class="w-full px-4 py-2 bg-gray-800 text-white rounded-full">Payment Method</button>
-                    <button id="placeOrder"
-                        class="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded-full shadow hover:bg-blue-600">
+                    <button id="placeOrder" class="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded-full shadow hover:bg-blue-600">
                         Place Order
+                    </button>
+                    <!-- Receipt Template (Hidden) -->
+                    <div id="receipt" class="hidden w-[80mm] p-4 text-sm">
+                        <h2 class="text-center font-bold">YB Shop</h2>
+                        <p class="text-center">Date: <span id="receipt-date"></span></p>
+                        <hr class="my-2">
+                        <div id="receipt-items"></div>
+                        <hr class="my-2">
+                        <div class="flex justify-between">
+                            <span>Subtotal:</span> <span id="receipt-subtotal"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Tax:</span> <span id="receipt-tax"></span>
+                        </div>
+                        <div class="flex justify-between font-bold">
+                            <span>Total:</span> <span id="receipt-total"></span>
+                        </div>
+                        <hr class="my-2">
+                        <p class="text-center">Thank You!</p>
+                    </div>
+                    <!-- Print Receipt Button -->
+                    <button onclick="printReceipt()" class="w-full px-4 py-2 bg-blue-500 text-white rounded-full">
+                        Print Receipt
                     </button>
                 </div>
             </div>
         </div>
+        <div class="my-6">
+    <h2 class="text-lg font-bold mb-4">Order History</h2>
+    <table class="w-full border-collapse" id="order-history">
+        <thead>
+            <tr>
+                <th class="border px-2 py-1">Date</th>
+                <th class="border px-2 py-1">Item</th>
+                <th class="border px-2 py-1">Quantity</th>
+                <th class="border px-2 py-1">Price</th>
+                <th class="border px-2 py-1">Total</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
     </div>
     <script src="app.js"></script>
     <script>
-        // Real-Time Date and Time
-        function updateDateTime() {
-            const dateElement = document.getElementById('current-date');
-            const timeElement = document.getElementById('current-time');
+    // Real-Time Date and Time
+    function updateDateTime() {
+        const dateElement = document.getElementById('current-date');
+        const timeElement = document.getElementById('current-time');
 
-            const now = new Date();
+        const now = new Date();
 
-            // Format date: "Wed, 29 May 2024"
-            const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
-            dateElement.textContent = now.toLocaleDateString('en-US', options);
+        // Format date: "Wed, 29 May 2024"
+        const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
+        dateElement.textContent = now.toLocaleDateString('en-US', options);
 
-            // Format time: "07:59 AM"
-            timeElement.textContent = now.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            });
-        }
+        // Format time: "07:59 AM"
+        timeElement.textContent = now.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+    }
 
-        // Update time every second
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
+    // Update time every second
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
     </script>
 </body>
 

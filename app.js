@@ -49,7 +49,7 @@ function renderProducts(category = null) {
 
     container.innerHTML = filtered.map(p => `
         <div class="p-4 bg-white rounded-lg text-center shadow">
-            <img src="${p.image}" alt="${p.name}" class="w-24 h-24 mx-auto mb-2">
+            <img src="${p.image}" alt="${p.name}" class="rounded-[20px] mb-2">
             <h3 class="font-bold">${p.name}</h3>
             <p>Stock: <span id="stock-${p.id}">${p.stock}</span></p>
             <p class="text-blue-600 font-bold">Price: $${p.price.toFixed(2)}</p>

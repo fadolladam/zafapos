@@ -14,6 +14,13 @@ async function fetchProducts() {
         const response = await fetch(SHEET_URL);
         const data = await response.json();
 
+        console.log("API Response:", data); // Log the API response
+
+        if (!data.values || data.values.length < 2) {
+            console.error("No product data found in the sheet.");
+            return;
+        }
+
         products = data.values.slice(1).map((row, index) => ({
             id: row[0],
             name: row[1],
@@ -21,8 +28,12 @@ async function fetchProducts() {
             price: parseFloat(row[4]) || 0,
             stock: parseInt(row[5]) || 0,
             rowIndex: index + 2,
-            image: row[6] || 'https://via.placeholder.com/100'
+            barcode: row[7] || "", // Assume barcode is in column 8
+            image: row[6] || "https://via.placeholder.com/100",
         }));
+
+
+        console.log("Parsed Products:", products); // Log parsed products
 
         categories = new Set(products.map(p => p.category));
         renderCategories();
@@ -31,6 +42,7 @@ async function fetchProducts() {
         console.error("Error fetching products:", error);
     }
 }
+
 
 // Render Categories
 function renderCategories() {
@@ -44,8 +56,17 @@ function renderCategories() {
 
 // Render Products
 function renderProducts(category = null) {
-    const container = document.getElementById('products');
+    console.log("Rendering products for category:", category); // Debug category
+
+    const container = document.getElementById("products");
+    if (!container) {
+        console.error("Products container not found!");
+        return;
+    }
+
     const filtered = category ? products.filter(p => p.category === category) : products;
+
+    console.log("Filtered Products:", filtered); // Log filtered products
 
     container.innerHTML = filtered.map(p => `
         <div class="p-4 bg-white rounded-lg text-center shadow">
@@ -57,6 +78,7 @@ function renderProducts(category = null) {
         </div>
     `).join('');
 }
+
 
 // Add to Cart
 function addToCart(id) {
@@ -220,21 +242,43 @@ async function fetchOrderHistory() {
             groupedByInvoice[invoiceID].items.push({ product, quantity, price, total });
         });
 
-        // Render grouped order history
-        const historyContainer = document.getElementById('order-history');
-        historyContainer.innerHTML = Object.entries(groupedByInvoice).map(([invoiceID, order]) => `
-            <tr>
-                <td class="border px-2 py-1 text-center">${invoiceID}</td>
-                <td class="border px-2 py-1 text-center">${order.date}</td>
-                <td class="border px-2 py-1 text-center">$${order.total.toFixed(2)}</td>
-                <td class="border px-2 py-1 text-center">
-                    <button onclick="viewOrderDetails('${invoiceID}')" class="text-blue-500 underline">View</button>
-                </td>
-            </tr>
-        `).join('');
+        renderOrderHistoryTable(groupedByInvoice);
     } catch (error) {
         console.error("Error fetching order history:", error);
     }
+}
+
+// Render Order History Table
+function renderOrderHistoryTable(groupedByInvoice) {
+    const filterDate = document.getElementById('filter-date').value.trim();
+    const searchInvoice = document.getElementById('search-invoice').value.trim().toLowerCase();
+    const historyContainer = document.getElementById('order-history');
+
+    // Filter orders based on search inputs
+    const filteredInvoices = Object.entries(groupedByInvoice).filter(([invoiceID, order]) => {
+        const matchesDate = !filterDate || order.date.includes(filterDate);
+        const matchesInvoice = !searchInvoice || invoiceID.toLowerCase().includes(searchInvoice);
+        return matchesDate && matchesInvoice;
+    });
+
+    // If no results found
+    if (!filteredInvoices.length) {
+        historyContainer.innerHTML = `
+            <tr><td colspan="4" class="text-center py-2">No matching orders found</td></tr>`;
+        return;
+    }
+
+    // Render filtered order history
+    historyContainer.innerHTML = filteredInvoices.map(([invoiceID, order]) => `
+        <tr>
+            <td class="border px-2 py-1 text-center">${invoiceID}</td>
+            <td class="border px-2 py-1 text-center">${order.date}</td>
+            <td class="border px-2 py-1 text-center">$${order.total.toFixed(2)}</td>
+            <td class="border px-2 py-1 text-center">
+                <button onclick="viewOrderDetails('${invoiceID}')" class="text-blue-500 underline">View</button>
+            </td>
+        </tr>
+    `).join('');
 }
 
 // View Order Details - Fetch all items belonging to the same invoice ID
@@ -332,4 +376,45 @@ async function viewOrderDetails(invoiceID) {
 // Close Modal
 function closeModal() {
     document.getElementById('order-details-modal').classList.add('hidden');
+}
+
+// Add Event Listener to Search Input
+document.getElementById("search-input").addEventListener("input", handleSearch);
+
+function handleSearch(event) {
+    const searchTerm = event.target.value.trim().toLowerCase();
+
+    // Filter products based on search term
+    const filteredProducts = products.filter(product => 
+        product.name.toLowerCase().includes(searchTerm) || 
+        product.barcode.toLowerCase().includes(searchTerm)
+    );
+
+    // Render filtered products
+    renderFilteredProducts(filteredProducts);
+}
+
+function renderFilteredProducts(filteredProducts) {
+    const container = document.getElementById("products");
+
+    if (!filteredProducts.length) {
+        container.innerHTML = `<p class="text-center text-gray-500">No products found.</p>`;
+        return;
+    }
+
+    container.innerHTML = filteredProducts.map(p => `
+        <div class="p-4 bg-white rounded-lg text-center shadow">
+            <img src="${p.image}" alt="${p.name}" class="rounded-[20px] mb-2">
+            <h3 class="font-bold">${p.name}</h3>
+            <p>Stock: <span id="stock-${p.id}">${p.stock}</span></p>
+            <p class="text-blue-600 font-bold">Price: $${p.price.toFixed(2)}</p>
+            <button onclick="addToCart('${p.id}')" class="mt-2 w-full bg-blue-500 text-white py-1 rounded-full hover:bg-blue-600">Add</button>
+        </div>
+    `).join('');
+}
+
+// Initial Rendering
+function renderProducts(category = null) {
+    const filtered = category ? products.filter(p => p.category === category) : products;
+    renderFilteredProducts(filtered);
 }

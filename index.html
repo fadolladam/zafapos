@@ -26,8 +26,14 @@
                 <div id="category-tabs" class="flex space-x-2 mb-4"></div>
                 <!-- Search -->
                 <div class="mb-4">
-                    <input type="text" id="search" placeholder="Search products..." class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none">
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        placeholder="Search by name or barcode..." 
+                        class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
                 </div>
+
                 <!-- Product Grid -->
                 <div id="products" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
             </div>
@@ -74,8 +80,8 @@
         <div class="my-6">
             <h2 class="text-lg font-bold mb-4">Order History</h2>
             <div class="flex space-x-4 mb-4">
-                <input type="date" id="filter-date" class="border rounded px-2 py-1">
-                <input type="text" id="search-invoice" placeholder="Search Invoice ID" class="border rounded px-2 py-1">
+                <input type="date" id="filter-date" class="border rounded px-2 py-1" placeholder="Filter by Date">
+                <input type="text" id="search-invoice" class="border rounded px-2 py-1" placeholder="Search by Invoice ID">
                 <button onclick="fetchOrderHistory()" class="bg-blue-500 text-white px-4 py-1 rounded">Search</button>
             </div>
             <table class="w-full border-collapse">
@@ -91,16 +97,14 @@
             </table>
         </div>
         <!-- Order Details Modal -->
-        <div id="order-details-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div class="bg-white rounded-lg shadow-lg w-1/2 p-6 relative">
-                <button onclick="closeModal()" class="absolute top-2 right-4 text-gray-600 font-bold text-xl">X</button>
-                <h2 class="text-center text-2xl font-bold mb-4">Invoice Details</h2>
-                <div id="order-details-content" class="text-gray-800"></div>
-                <div class="mt-4 text-center">
-                    <button onclick="closeModal()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Close</button>
-                </div>
+        <!-- Order Details Modal -->
+        <div id="order-details-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-lg p-4 max-w-md w-full">
+                <div id="order-details-content"></div>
+                <button onclick="closeModal()" class="mt-4 bg-red-500 text-white py-2 px-4 rounded-full">Close</button>
             </div>
         </div>
+
     </div>
     <script src="app.js"></script>
     <script>

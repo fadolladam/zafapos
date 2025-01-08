@@ -90,24 +90,24 @@
                     </div>
                     <style>
                         .animate-marquee {
-            display: flex;
-            animation: marquee 5s linear infinite;
-        }
+                            display: flex;
+                            animation: marquee 5s linear infinite;
+                        }
 
-        @keyframes marquee {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
-        }
+                        @keyframes marquee {
+                            0% {
+                                transform: translateX(0);
+                            }
+                            100% {
+                                transform: translateX(-50%);
+                            }
+                        }
 
-        #carousel .min-w-[300px] {
-            flex: none;
-            width: 300px;
-        }
-    </style>
+                        #carousel .min-w-[300px] {
+                            flex: none;
+                            width: 300px;
+                        }
+                    </style>
                 </div>
                 <!-- End of Carousel -->
             </div>
@@ -118,7 +118,7 @@
             <div class="flex space-x-4 mb-4">
                 <input type="date" id="filter-date" class="border rounded px-2 py-1" placeholder="Filter by Date">
                 <input type="text" id="search-invoice" class="border rounded px-2 py-1" placeholder="Search by Invoice ID">
-                <button onclick="fetchOrderHistory()" class="bg-blue-500 text-white px-4 py-1 rounded">Search</button>
+                <button onclick="fetchOrderHistory()" class="bg-blue-500 text-white px-4 py-1 rounded-full">Search</button>
             </div>
             <table class="w-full border-collapse">
                 <thead>

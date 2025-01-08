@@ -10,6 +10,43 @@
         body {
             background-color: #f3f4f6;
         }
+
+        .product-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1rem;
+        }
+
+        .product-carousel > div {
+            scroll-snap-align: start;
+            flex: none;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .product-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scroll-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .scroll-button.left {
+            left: 0;
+        }
+
+        .scroll-button.right {
+            right: 0;
+        }
     </style>
 </head>
 <body class="font-sans">
@@ -21,37 +58,64 @@
             <p class="text-sm text-gray-500">Your items will appear here as you add them to the cart.</p>
         </div>
 
-        <!-- Product Display -->
-        <div class="mb-6">
-            <h2 class="text-2xl font-bold text-gray-700 mb-4">Available Products</h2>
-            <div id="customer-products" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <!-- Products will render here -->
+        <!-- Main Content -->
+        <div class="flex flex-col md:flex-row gap-6">
+            <!-- Banner Section -->
+            <div class="md:w-1/2 relative">
+                <h2 class="text-2xl font-bold text-gray-700 mb-4">Promotional Banners</h2>
+                <button class="scroll-button left" onclick="scrollCarousel('left')">&#8249;</button>
+                <div class="product-carousel" id="product-carousel">
+                    <div class="bg-blue-100 p-4 rounded-lg shadow">
+                        <img src="https://dimg04.tripcdn.com/images/1zp3c12000hkr6p437A2C.png" alt="Banner 1" class="rounded mb-2">
+                        <p class="font-bold text-center">Special Offer 1</p>
+                    </div>
+                    <div class="bg-blue-100 p-4 rounded-lg shadow">
+                        <img src="https://dimg04.tripcdn.com/images/0a11r12000hhltzbx828B.jpg" alt="Banner 2" class="rounded mb-2">
+                        <p class="font-bold text-center">Special Offer 2</p>
+                    </div>
+                    <div class="bg-blue-100 p-4 rounded-lg shadow">
+                        <img src="https://dimg04.tripcdn.com/images/0a10112000hdo8gff7C64.png" alt="Banner 3" class="rounded mb-2">
+                        <p class="font-bold text-center">Special Offer 3</p>
+                    </div>
+                </div>
+                <button class="scroll-button right" onclick="scrollCarousel('right')">&#8250;</button>
             </div>
-        </div>
 
-        <!-- Cart Summary -->
-        <div class="bg-gray-100 p-4 rounded-lg">
-            <h2 class="text-2xl font-bold text-gray-700 mb-4">Cart Summary</h2>
-            <div id="customer-cart-items" class="space-y-4">
-                <p class="text-gray-500">No items in the cart yet.</p>
-            </div>
-            <div class="mt-6">
-                <div class="flex justify-between font-bold text-lg">
-                    <span>Subtotal:</span>
-                    <span id="customer-subtotal">$0.00</span>
+            <!-- Cart Summary Section -->
+            <div class="md:w-1/2 bg-gray-100 p-4 rounded-lg">
+                <h2 class="text-2xl font-bold text-gray-700 mb-4">Cart Summary</h2>
+                <div id="customer-cart-items" class="space-y-4">
+                    <p class="text-gray-500">No items in the cart yet.</p>
                 </div>
-                <div class="flex justify-between">
-                    <span>Tax (10%):</span>
-                    <span id="customer-tax">$0.00</span>
-                </div>
-                <div class="flex justify-between font-bold text-xl">
-                    <span>Total:</span>
-                    <span id="customer-total">$0.00</span>
+                <div class="mt-6">
+                    <div class="flex justify-between font-bold text-lg">
+                        <span>Subtotal:</span>
+                        <span id="customer-subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Tax (10%):</span>
+                        <span id="customer-tax">$0.00</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-xl">
+                        <span>Total:</span>
+                        <span id="customer-total">$0.00</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="customerDisplay.js"></script>
+    <script>
+        function scrollCarousel(direction) {
+            const carousel = document.getElementById('product-carousel');
+            const scrollAmount = 300; // Adjust for the width of one product
+
+            if (direction === 'left') {
+                carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else if (direction === 'right') {
+                carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+    </script>
 </body>
 </html>

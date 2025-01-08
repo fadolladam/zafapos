@@ -63,19 +63,18 @@ function renderCustomerCart() {
 
 // Listen for updates from the main application
 function listenForUpdates() {
-const channel = new BroadcastChannel('cart_updates');
-channel.onmessage = (event) => {
-    console.log("Cart update received:", event.data);
-    if (event.data.type === 'update_cart') {
-        cart = event.data.data.cart;
-        renderCustomerCart();
-    }
-};
-
+    const channel = new BroadcastChannel('cart_updates');
+    channel.onmessage = (event) => {
+        console.log("Cart update received:", event.data);
+        if (event.data.type === 'update_cart') {
+            cart = event.data.data.cart;
+            renderCustomerCart();
+        }
+    };
+}
 
 // Initialize the customer display
 document.addEventListener('DOMContentLoaded', () => {
     fetchCustomerProducts();
     listenForUpdates();
 });
-

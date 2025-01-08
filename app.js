@@ -72,8 +72,8 @@ function renderProducts(category = null) {
         <div class="p-4 bg-white rounded-lg text-center shadow">
             <img src="${p.image}" alt="${p.name}" class="rounded-[20px] mb-2">
             <h3 class="font-bold">${p.name}</h3>
-            <p>Stock: <span id="stock-${p.id}">${p.stock}</span></p>
             <p class="text-blue-600 font-bold">Price: $${p.price.toFixed(2)}</p>
+            <p>Stock: <span id="stock-${p.id}">${p.stock}</span></p>
             <button onclick="addToCart('${p.id}')" class="mt-2 w-full bg-blue-500 text-white py-1 rounded-full hover:bg-blue-600">Add</button>
         </div>
     `).join('');
@@ -408,7 +408,7 @@ function renderFilteredProducts(filteredProducts) {
             <h3 class="font-bold">${p.name}</h3>
             <p>Stock: <span id="stock-${p.id}">${p.stock}</span></p>
             <p class="text-blue-600 font-bold">Price: $${p.price.toFixed(2)}</p>
-            <button onclick="addToCart('${p.id}')" class="mt-2 w-full bg-blue-500 text-white py-1 rounded-full hover:bg-blue-600">Add</button>
+            <button onclick="addToCart('${p.id}')" class="mt-2 w-full bg-blue-500 text-white py-1 rounded-[20px] hover:bg-blue-600">Add</button>
         </div>
     `).join('');
 }

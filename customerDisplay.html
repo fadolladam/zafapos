@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Display</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Customer Display -->
+    <div class="container mx-auto my-6 bg-white rounded-lg shadow-lg p-6">
+        <!-- Store Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-blue-600">Welcome to Our Store</h1>
+            <p class="text-sm text-gray-500">Your items will appear here as you add them to the cart.</p>
+        </div>
+
+        <!-- Product Display -->
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-700 mb-4">Available Products</h2>
+            <div id="customer-products" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Products will render here -->
+            </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="bg-gray-100 p-4 rounded-lg">
+            <h2 class="text-2xl font-bold text-gray-700 mb-4">Cart Summary</h2>
+            <div id="customer-cart-items" class="space-y-4">
+                <p class="text-gray-500">No items in the cart yet.</p>
+            </div>
+            <div class="mt-6">
+                <div class="flex justify-between font-bold text-lg">
+                    <span>Subtotal:</span>
+                    <span id="customer-subtotal">$0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Tax (10%):</span>
+                    <span id="customer-tax">$0.00</span>
+                </div>
+                <div class="flex justify-between font-bold text-xl">
+                    <span>Total:</span>
+                    <span id="customer-total">$0.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="customerDisplay.js"></script>
+</body>
+</html>

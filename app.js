@@ -418,3 +418,4 @@ function renderProducts(category = null) {
     const filtered = category ? products.filter(p => p.category === category) : products;
     renderFilteredProducts(filtered);
 }
+

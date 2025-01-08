@@ -13,16 +13,16 @@
 
         .product-carousel {
             display: flex;
-            overflow-x: auto;
+            overflow-x: hidden;
             scroll-snap-type: x mandatory;
-            gap: 1rem;
+            width: 100%;
+            position: relative;
         }
 
         .product-carousel > div {
-            scroll-snap-align: start;
+            scroll-snap-align: center;
             flex: none;
             width: 100%;
-            max-width: 300px;
         }
 
         .product-carousel::-webkit-scrollbar {
@@ -41,11 +41,11 @@
         }
 
         .scroll-button.left {
-            left: 0;
+            left: 1rem;
         }
 
         .scroll-button.right {
-            right: 0;
+            right: 1rem;
         }
     </style>
 </head>
@@ -65,17 +65,14 @@
                 <h2 class="text-2xl font-bold text-gray-700 mb-4">Promotional Banners</h2>
                 <button class="scroll-button left" onclick="scrollCarousel('left')">&#8249;</button>
                 <div class="product-carousel" id="product-carousel">
-                    <div class="bg-blue-100 p-4 rounded-lg shadow">
-                        <img src="https://dimg04.tripcdn.com/images/1zp3c12000hkr6p437A2C.png" alt="Banner 1" class="rounded mb-2">
-                        <p class="font-bold text-center">Special Offer 1</p>
+                    <div class="bg-blue-100 p-4 flex items-center justify-center">
+                        <img src="https://dimg04.tripcdn.com/images/1zp3c12000hkr6p437A2C.png" alt="Banner 1" class="rounded shadow">
                     </div>
-                    <div class="bg-blue-100 p-4 rounded-lg shadow">
-                        <img src="https://dimg04.tripcdn.com/images/0a11r12000hhltzbx828B.jpg" alt="Banner 2" class="rounded mb-2">
-                        <p class="font-bold text-center">Special Offer 2</p>
+                    <div class="bg-blue-100 p-4 flex items-center justify-center">
+                        <img src="https://dimg04.tripcdn.com/images/0a11r12000hhltzbx828B.jpg" alt="Banner 2" class="rounded shadow">
                     </div>
-                    <div class="bg-blue-100 p-4 rounded-lg shadow">
-                        <img src="https://dimg04.tripcdn.com/images/0a10112000hdo8gff7C64.png" alt="Banner 3" class="rounded mb-2">
-                        <p class="font-bold text-center">Special Offer 3</p>
+                    <div class="bg-blue-100 p-4 flex items-center justify-center">
+                        <img src="https://dimg04.tripcdn.com/images/0a10112000hdo8gff7C64.png" alt="Banner 3" class="rounded shadow">
                     </div>
                 </div>
                 <button class="scroll-button right" onclick="scrollCarousel('right')">&#8250;</button>
@@ -108,7 +105,7 @@
     <script>
         function scrollCarousel(direction) {
             const carousel = document.getElementById('product-carousel');
-            const scrollAmount = 300; // Adjust for the width of one product
+            const scrollAmount = carousel.clientWidth; // Full width of one product
 
             if (direction === 'left') {
                 carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });

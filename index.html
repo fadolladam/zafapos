@@ -7,6 +7,7 @@
     <title>POS System</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    
 </head>
 
 <body class="bg-gradient-to-br from-gray-100 to-blue-100 font-sans">
@@ -15,22 +16,23 @@
         <div class="flex flex-col md:flex-row">
             <!-- Left Section: Product Grid -->
             <div class="w-full md:w-3/5 pr-4 border-r mb-6 md:mb-0">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="text-sm text-gray-600 flex space-x-2 items-center">
-                        <span id="current-date" class="bg-blue-100 text-blue-500 px-3 py-1 rounded-full font-semibold"></span>
-                        <span id="current-time" class="text-gray-500"></span>
-                    </div>
-                    <button class="text-green-500 font-semibold hover:text-green-600">● Open Order</button>
-                </div>
-                <!-- Category Tabs -->
-                <div id="category-tabs" class="flex space-x-2 mb-4"></div>
-                <!-- Search -->
-                <div class="mb-4">
-                    <input type="text" id="search-input" placeholder="Search by name or barcode..." class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none" />
-                </div>
-                <!-- Product Grid -->
-                <div id="products" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
-            </div>
+    <div class="flex items-center justify-between mb-4">
+        <div class="text-sm text-gray-600 flex space-x-2 items-center">
+            <span id="current-date" class="bg-blue-100 text-blue-500 px-3 py-1 rounded-full font-semibold"></span>
+            <span id="current-time" class="text-gray-500"></span>
+        </div>
+        <button class="text-green-500 font-semibold hover:text-green-600">● Open Order</button>
+    </div>
+    <!-- Category Tabs -->
+    <div id="category-tabs" class="flex space-x-2 mb-4"></div>
+    <!-- Search -->
+    <div class="mb-4">
+        <input type="text" id="search-input" placeholder="Search by name or barcode..." class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none" />
+    </div>
+    <!-- Product Grid -->
+    <div id="products" class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</div>
+
             <!-- Right Section: Cart -->
             <div class="w-full md:w-2/5 pl-4">
                 <div class="bg-gray-100 rounded-3xl p-4 mb-4">
@@ -73,7 +75,19 @@
                     <h2 class="text-lg font-semibold mb-4">Promotional Banners</h2>
                     <div class="relative overflow-hidden">
                         <div class="flex space-x-4 animate-marquee">
-                            <!-- Duplicated items for seamless looping -->
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/1zp3c12000hkr6p437A2C.png" alt="Banner 1" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 1</p>
+                            </div>
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/0a11r12000hhltzbx828B.jpg" alt="Banner 2" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 2</p>
+                            </div>
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/0a10112000hdo8gff7C64.png" alt="Banner 3" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 3</p>
+                            </div>
+                            <!-- Duplicate Items -->
                             <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
                                 <img src="https://dimg04.tripcdn.com/images/1zp3c12000hkr6p437A2C.png" alt="Banner 1" class="rounded mb-2">
                                 <p class="font-bold">Special Offer 1</p>
@@ -96,10 +110,10 @@
 
                         @keyframes marquee {
                             0% {
-                                transform: translateX(0);
+                                transform: translateX(0%);
                             }
                             100% {
-                                transform: translateX(-50%);
+                                transform: translateX(-100%);
                             }
                         }
 
@@ -163,6 +177,25 @@
             hour12: true
         });
     }
+    const cartUpdateChannel = new BroadcastChannel('cart-update');
+
+    function updateCustomerCart(cart) {
+        const cartData = {
+            items: Object.values(cart).map(item => ({
+                name: item.name,
+                quantity: item.quantity,
+                price: item.price,
+            })),
+            total: Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0),
+            cashier: "Cashier Name", // Replace with dynamic cashier name if available
+            date: new Date().toLocaleDateString(),
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        };
+        cartUpdateChannel.postMessage(cartData);
+        console.log('Cart sent to customer display:', cartData); // Debugging
+    }
+
+
     setInterval(updateDateTime, 1000);
     updateDateTime();
     </script>

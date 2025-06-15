@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Display</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="https://placehold.co/1200x1200/e74c3c/ffffff?text=Z">
 </head>
 
 <body class="bg-gray-100 font-sans">
@@ -16,7 +17,7 @@
             
             <!-- Image Slideshow Section -->
             <div class="w-full md:w-2/3 relative">
-                <img id="food-image" src="https://placehold.co/1200x800/3498db/ffffff?text=Delicious+Food" alt="Food Display" class="w-full h-full object-cover transition-opacity duration-1000">
+                <img id="food-image" src="customersdisplay1.png" alt="Food Display" class="w-full h-full object-cover transition-opacity duration-1000">
                 <img id="food-image-next" src="https://placehold.co/1200x800/e74c3c/ffffff?text=Special+Offers" alt="Food Display" class="w-full h-full object-cover absolute top-0 left-0 opacity-0 transition-opacity duration-1000">
             </div>
 
@@ -66,9 +67,12 @@
     <script>
         // --- Slideshow Logic ---
         const images = [
-            "https://placehold.co/1200x800/3498db/ffffff?text=Delicious+Food", 
-            "https://placehold.co/1200x800/e74c3c/ffffff?text=Special+Offers", 
-            "https://placehold.co/1200x800/2ecc71/ffffff?text=Fresh+Ingredients"
+            "customersdisplay1.png", 
+            "customersdisplay2.png",
+            "customersdisplay3.png"
+            // "https://placehold.co/1200x800/3498db/ffffff?text=Delicious+Food", 
+            // "https://placehold.co/1200x800/e74c3c/ffffff?text=Special+Offers", 
+            // "https://placehold.co/1200x800/2ecc71/ffffff?text=Fresh+Ingredients"
         ];
         let currentImageIndex = 0;
         const img1 = document.getElementById('food-image');

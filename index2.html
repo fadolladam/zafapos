@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="https://placehold.co/1200x1200/e74c3c/ffffff?text=Z">    
+    <style>
+        /* General Styles */
+        body {
+          font-family: 'Segoe UI', Arial, sans-serif;
+          background-color: #f8f9fc;
+          color: #333;
+          margin: 0;
+          padding: 0;
+        }
+
+        /* Containers */
+        .container {
+          background-color: #ffffff;
+          border-radius: 20px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+        }
+
+        /* Buttons */
+        button {
+          border: none;
+          cursor: pointer;
+          border-radius: 50px;
+          transition: background-color 0.3s, transform 0.2s ease;
+        }
+
+        button:hover {
+          transform: translateY(-3px);
+        }
+
+        .bg-blue-500 {
+          background-color: #3b82f6;
+        }
+
+        .bg-blue-500:hover {
+          background-color: #2563eb;
+        }
+
+        .bg-gray-200 {
+          background-color: #e5e7eb;
+        }
+
+        .bg-gray-200:hover {
+          background-color: #d1d5db;
+        }
+
+        /* Header Buttons */
+        .button-close {
+          color: #ef4444;
+          font-weight: bold;
+          transition: color 0.3s ease;
+        }
+
+        .button-close:hover {
+          color: #dc2626;
+          text-decoration: underline;
+        }
+
+        /* Product Card */
+        .product-card {
+          background-color: #ffffff;
+          border-radius: 16px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          padding: 1rem;
+          text-align: center;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          position: relative;
+        }
+
+        .product-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+          width: 100px;
+          height: 100px;
+          margin: 0 auto 10px;
+          object-fit: contain;
+          border-radius: 8px;
+          background-color: #f9fafb;
+        }
+
+        .product-title {
+          font-size: 1rem;
+          font-weight: bold;
+          color: #333;
+          margin-bottom: 6px;
+        }
+
+        .product-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 0.5rem;
+        }
+
+        .category-tag {
+          background-color: #fde68a;
+          color: #b45309;
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+          border-radius: 12px;
+          font-weight: bold;
+        }
+
+        .product-price {
+          font-size: 1rem;
+          font-weight: bold;
+          color: #3b82f6;
+        }
+
+
+        /* Input Fields */
+        input[type="text"], input[type="date"] {
+          border: 1px solid #d1d5db;
+          border-radius: 50px;
+          padding: 0.75rem 1.25rem;
+          width: 100%;
+          outline: none;
+          background-color: #f9fafb;
+          transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+          background-color: #fff;
+        }
+
+        /* Cart Section */
+        .cart-items {
+          max-height: 250px;
+          overflow-y: auto;
+          background-color: #f9fafb;
+          padding: 1rem;
+          border-radius: 16px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid #e5e7eb;
+        }
+
+        .cart-item:last-child {
+          border-bottom: none;
+        }
+
+        .cart-item span {
+          font-weight: bold;
+        }
+
+        /* Totals Section */
+        .totals {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #333;
+        }
+
+        .totals span {
+          color: #3b82f6;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+          font-weight: 700;
+          color: #333;
+          margin: 0;
+        }
+
+        .text-sm {
+          color: #6b7280;
+          font-size: 0.875rem;
+        }
+
+        .text-lg {
+          font-size: 1.125rem;
+          font-weight: bold;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+          border-radius: 50px;
+          padding: 0.75rem;
+          font-weight: bold;
+          text-align: center;
+          transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .action-btn:hover {
+          transform: translateY(-2px);
+        }
+
+        .place-order-btn {
+          background-color: #2563eb;
+          color: #fff;
+        }
+
+        .place-order-btn:hover {
+          background-color: #1d4ed8;
+        }
+
+        .payment-btn {
+          background-color: #333;
+          color: #fff;
+        }
+
+        .payment-btn:hover {
+          background-color: #444;
+        }
+
+        .promo-btn {
+          background-color: #e5e7eb;
+          color: #333;
+        }
+
+        .promo-btn:hover {
+          background-color: #d1d5db;
+        }
+
+        /* Scrollbar */
+        .cart-items::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .cart-items::-webkit-scrollbar-thumb {
+          background-color: #cbd5e1;
+          border-radius: 10px;
+        }
+
+        .cart-items::-webkit-scrollbar-thumb:hover {
+          background-color: #94a3b8;
+        }
+        
+        .animate-marquee {
+            display: flex;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        #carousel .min-w-\[300px\] {
+            flex: none;
+            width: 300px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #receipt, #receipt * {
+                visibility: visible;
+            }
+            #receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 80mm;
+                font-family: 'Courier New', Courier, monospace;
+            }
+        }
+        @media (max-width: 767px) {
+            body {
+                padding-bottom: 80px; /* Space for sticky footer */
+            }
+          .container {
+            padding: 1rem;
+            border-radius: 1rem;
+          }
+        
+          .flex.md\:flex-row {
+            flex-direction: column;
+          }
+        
+          .md\:w-3\/5, .md\:w-2\/5, .pr-4, .pl-4 {
+            width: 100% !important;
+            padding: 0 !important;
+            border: none !important;
+          }
+        
+          #products {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 0.5rem;
+          }
+        
+          .flex.justify-end.mb-4.gap-2 {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: stretch;
+          }
+        
+          .cart-items {
+            height: auto;
+            max-height: 300px;
+          }
+        
+          #carousel .flex {
+            animation: none;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+          }
+        
+          #carousel .min-w-\[300px\] {
+            scroll-snap-align: start;
+            width: 85vw !important;
+          }
+        
+          .text-lg {
+            font-size: 1rem;
+          }
+        
+          .px-4 {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+          }
+        
+          .py-2 {
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+          }
+        }
+#category-tabs {
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+#category-tabs button {
+  display: inline-block;
+  margin-right: 0.5rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  #category-tabs {
+    padding-bottom: 0.5rem;
+  }
+}
+
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-100 to-blue-100 font-sans">
+    <div class="container mx-auto my-6 bg-white rounded-3xl shadow-lg p-4">
+        <div class="flex justify-end mb-4 gap-2">
+      <a href="customers-preview.html" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600">
+        Customer Preview
+      </a>
+      <a href="report.html" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600">
+        Report
+      </a>
+    </div>
+        <div class="flex flex-col md:flex-row">
+            <div class="w-full md:w-3/5 pr-4 border-r mb-6 md:mb-0">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-sm text-gray-600 flex space-x-2 items-center">
+                        <span id="current-date" class="bg-blue-100 text-blue-500 px-3 py-1 rounded-full font-semibold"></span>
+                        <span id="current-time" class="text-gray-500"></span>
+                    </div>
+                    <button class="text-green-500 font-semibold hover:text-green-600">● Open Order</button>
+                </div>
+                <div id="category-tabs" class="flex space-x-2 mb-4"></div>
+                <div class="mb-4">
+                    <input type="text" id="search-input" placeholder="Search by name or barcode..." class="w-full px-6 py-2 border rounded-full focus:ring-2 focus:ring-blue-500 outline-none" />
+                </div>
+                <div id="products" class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div id="checkout-section" class="w-full md:w-2/5 pl-4">
+                <div class="bg-gray-100 rounded-3xl p-4 mb-4">
+                    <h2 class="text-lg font-semibold mb-2">Customer's Name</h2>
+                    <p class="text-sm text-gray-500">Order Number: #000</p>
+                </div>
+                <div id="cart-items" class="h-64 overflow-y-auto mb-4"></div>
+                <div>
+                    <div class="flex justify-between">
+                        <span>Subtotal:</span> <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Tax 10%:</span> <span id="tax">$0.00</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-lg">
+                        <span>Total:</span> <span id="total">$0.00</span>
+                    </div>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <button id="placeOrderAndPrint" onclick="placeOrderAndPrint()" class="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded-full shadow hover:bg-blue-600">
+                        Place Order & Print Receipt
+                    </button>
+                </div>
+                <div id="receipt" class="hidden w-[80mm] p-4 text-sm bg-white shadow-lg">
+                    <h2 class="text-center font-bold">YB Shop</h2>
+                    <p class="text-center">Invoice ID: <span id="receipt-invoice"></span></p>
+                    <p class="text-center">Date: <span id="receipt-date"></span></p>
+                    <hr class="my-2">
+                    <div id="receipt-items"></div>
+                    <hr class="my-2">
+                    <div class="flex justify-between"><span>Subtotal:</span> <span id="receipt-subtotal"></span></div>
+                    <div class="flex justify-between"><span>Tax:</span> <span id="receipt-tax"></span></div>
+                    <div class="flex justify-between font-bold"><span>Total:</span> <span id="receipt-total"></span></div>
+                    <hr class="my-2">
+                    <p class="text-center">Thank You!</p>
+                </div>
+                <div id="carousel" class="mt-6">
+                    <h2 class="text-lg font-semibold mb-4">Promotional Banners</h2>
+                    <div class="relative overflow-hidden">
+                        <div class="flex space-x-4 animate-marquee">
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/1zp3c12000hkr6p437A2C.png" alt="Banner 1" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 1</p>
+                            </div>
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/0a11r12000hhltzbx828B.jpg" alt="Banner 2" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 2</p>
+                            </div>
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/0a10112000hdo8gff7C64.png" alt="Banner 3" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 3</p>
+                            </div>
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/1zp3c12000hkr6p437A2C.png" alt="Banner 1" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 1</p>
+                            </div>
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/0a11r12000hhltzbx828B.jpg" alt="Banner 2" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 2</p>
+                            </div>
+                            <div class="min-w-[300px] p-4 bg-white rounded-lg text-center shadow">
+                                <img src="https://dimg04.tripcdn.com/images/0a10112000hdo8gff7C64.png" alt="Banner 3" class="rounded mb-2">
+                                <p class="font-bold">Special Offer 3</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </div>
+        <div class="my-6">
+            <h2 class="text-lg font-bold mb-4">Order History</h2>
+            <div class="flex space-x-4 mb-4">
+                <input type="date" id="filter-date" class="border rounded px-2 py-1" placeholder="Filter by Date">
+                <input type="text" id="search-invoice" class="border rounded px-2 py-1" placeholder="Search by Invoice ID">
+                <button onclick="fetchOrderHistory()" class="bg-blue-500 text-white px-4 py-1 rounded-full">Search</button>
+            </div>
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr>
+                        <th class="border px-2 py-1">Invoice ID</th>
+                        <th class="border px-2 py-1">Date</th>
+                        <th class="border px-2 py-1">Total</th>
+                        <th class="border px-2 py-1">Details</th>
+                    </tr>
+                </thead>
+                <tbody id="order-history"></tbody>
+            </table>
+        </div>
+        <div id="order-details-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-lg p-4 max-w-md w-full">
+                <div id="order-details-content"></div>
+                <button onclick="closeModal()" class="mt-4 bg-red-500 text-white py-2 px-4 rounded-full">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="mobile-menu" class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 flex justify-around p-2 z-50">
+        <a href="#checkout-section" onclick="document.getElementById('checkout-section').scrollIntoView({ behavior: 'smooth' });" class="flex flex-col items-center text-gray-600 hover:text-blue-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <span class="text-xs">Checkout</span>
+        </a>
+        <a href="report.html" target="_blank" class="flex flex-col items-center text-gray-600 hover:text-blue-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <span class="text-xs">Report</span>
+        </a>
+    </div>
+
+    <script>
+        const SHEET_ID = '1uwetY0HWt69NIcIBgEs7II94SUUd_UG6J5Sxe5uO-AM';
+        const API_KEY = 'AIzaSyDytDPZlv8eA5N-XZiMzrj2BsSjYDNm_co'; // IMPORTANT: This is a placeholder key. Replace with your actual key.
+        const SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/master?key=${API_KEY}`;
+        const ORDER_HISTORY_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Order%20History?key=${API_KEY}`;
+        const DEPLOYED_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNk-UV6DHs1MQ1Tv1l8nmWatiA63iWRA_QWmIBY89fwkuGNIB4kglKh5bwB5UHoxH7dA/exec';
+
+        let products = [];
+        let cart = {};
+        let categories = new Set();
+        const cartUpdateChannel = new BroadcastChannel('cart-update');
+
+
+        // Fetch Products
+        async function fetchProducts() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const data = await response.json();
+
+                if (!data.values || data.values.length < 2) {
+                    console.error("No product data found in the sheet.");
+                    return;
+                }
+
+                products = data.values.slice(1).map((row, index) => ({
+                    id: row[0],
+                    name: row[1],
+                    category: row[2],
+                    price: parseFloat(row[4]) || 0,
+                    stock: parseInt(row[5]) || 0,
+                    rowIndex: index + 2,
+                    barcode: row[7] || "",
+                    image: row[6] || "https://placehold.co/100x100/e2e8f0/e2e8f0?text=No+Image",
+                }));
+
+                categories = new Set(products.map(p => p.category));
+                renderCategories();
+                renderProducts();
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        }
+
+        // Render Categories
+        function renderCategories() {
+            const tabs = document.getElementById('category-tabs');
+            tabs.innerHTML = `
+                <button onclick="renderProducts()" class="bg-blue-500 text-white px-4 py-2 rounded-full">All</button>
+            ` + Array.from(categories).map(cat => `
+                <button onclick="renderProducts('${cat}')" class="bg-gray-200 px-4 py-2 rounded-full">${cat}</button>
+            `).join('');
+        }
+
+        // Render Products
+        function renderProducts(category = null) {
+            const filtered = category ? products.filter(p => p.category === category) : products;
+            renderFilteredProducts(filtered);
+        }
+
+        // Render Filtered Products
+        function renderFilteredProducts(filteredProducts) {
+            const container = document.getElementById("products");
+
+            if (!filteredProducts.length) {
+                container.innerHTML = `<p class="text-center text-gray-500">No products found.</p>`;
+                return;
+            }
+
+            container.innerHTML = filteredProducts.map(p => `
+                <div class="p-4 bg-white rounded-lg text-center shadow">
+                    <img src="${p.image}" alt="${p.name}" class="rounded-[20px] mb-2">
+                    <h3 class="font-bold">${p.name}</h3>
+                    <p>Stock: <span id="stock-${p.id}">${p.stock}</span></p>
+                    <p class="text-blue-600 font-bold">Price: $${p.price.toFixed(2)}</p>
+                    <button onclick="addToCart('${p.id}')" class="mt-2 w-full bg-blue-500 text-white py-1 rounded-[20px] hover:bg-blue-600">Add</button>
+                </div>
+            `).join('');
+        }
+
+        // Add to Cart
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+
+            if (product && product.stock > 0) {
+                if (!cart[id]) {
+                    cart[id] = { ...product, quantity: 0 };
+                }
+
+                cart[id].quantity++;
+                product.stock--; 
+
+                document.getElementById(`stock-${id}`).textContent = product.stock;
+                renderCart();
+            } else {
+                alert('Out of stock!');
+            }
+        }
+
+        // Update Cart Quantity
+        function updateCartQuantity(id, change) {
+            const product = products.find(p => p.id === id);
+
+            if (cart[id]) {
+                cart[id].quantity += change;
+                 product.stock -= change;
+
+                if (cart[id].quantity <= 0) {
+                    delete cart[id];
+                }
+
+                document.getElementById(`stock-${id}`).textContent = product.stock;
+                renderCart();
+            }
+        }
+        
+        // Render Cart
+        function renderCart() {
+            const cartContainer = document.getElementById('cart-items');
+            let subtotal = 0;
+
+            if (Object.keys(cart).length === 0) {
+                cartContainer.innerHTML = '<p class="text-center text-gray-500">Cart is empty</p>';
+            } else {
+                cartContainer.innerHTML = Object.values(cart).map(item => {
+                    const total = item.price * item.quantity;
+                    subtotal += total;
+
+                    return `
+                        <div class="flex justify-between items-center mb-2">
+                            <img src="${item.image}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover">
+                            <span class="flex-grow px-2">${item.name} x${item.quantity}</span>
+                            <div>
+                                <button onclick="updateCartQuantity('${item.id}', -1)" class="text-red-500 px-2">-</button>
+                                <button onclick="updateCartQuantity('${item.id}', 1)" class="text-green-500 px-2">+</button>
+                            </div>
+                            <span>$${total.toFixed(2)}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+
+            const tax = subtotal * 0.10;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+            
+            updateCustomerCart();
+        }
+
+
+        // Place Order and Update Google Sheets
+        // Place Order and Update Google Sheets
+async function placeOrderAndPrint() {
+    if (Object.keys(cart).length === 0) {
+        alert('Cart is empty!');
+        return;
+    }
+
+    const invoiceID = `INV-${Date.now()}`;
+    const currentDate = new Date().toLocaleString();
+
+    const updates = Object.values(cart).map(item => {
+        const product = products.find(p => p.id === item.id);
+        return {
+            rowIndex: product.rowIndex, // correct row index in the sheet
+            newStock: product.stock     // correct updated stock from products array
+        };
+    });
+
+    const orderHistory = Object.values(cart).map(item => ({
+        invoiceID,
+        date: currentDate,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        total: (item.price * item.quantity).toFixed(2)
+    }));
+
+    console.log("Sending stock updates:", updates);
+    console.log("Order history to record:", orderHistory);
+
+    try {
+        const response = await fetch(DEPLOYED_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ updates, orderHistory })
+        });
+
+        generateReceipt(invoiceID, currentDate);
+        
+        // Clear cart and refresh
+        cart = {};
+        renderCart();
+        fetchProducts(); // to refresh stock display from Google Sheet
+        
+        alert("Order placed successfully! Stock updated.");
+    } catch (error) {
+        console.error("Error placing order:", error);
+        alert("Failed to place order. Please try again.");
+    }
+}
+
+
+
+        // Generate Receipt
+        function generateReceipt(invoiceID, date) {
+            document.getElementById('receipt-invoice').textContent = invoiceID;
+            document.getElementById('receipt-date').textContent = date;
+
+            const receiptItems = Object.values(cart).map(item => `
+                <div class="flex justify-between">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('receipt-items').innerHTML = receiptItems;
+            document.getElementById('receipt-subtotal').textContent = document.getElementById('subtotal').textContent;
+            document.getElementById('receipt-tax').textContent = document.getElementById('tax').textContent;
+            document.getElementById('receipt-total').textContent = document.getElementById('total').textContent;
+
+            const receiptWindow = window.open('', 'PRINT', 'height=600,width=800');
+            receiptWindow.document.write('<html><head><title>Receipt</title>');
+            receiptWindow.document.write('<link rel="stylesheet" href="https://cdn.tailwindcss.com/"></head><body>');
+            receiptWindow.document.write(document.getElementById('receipt').innerHTML);
+            receiptWindow.document.write('</body></html>');
+            receiptWindow.document.close();
+            receiptWindow.focus();
+            receiptWindow.print();
+            // receiptWindow.close();
+        }
+
+        // Fetch Order History
+        async function fetchOrderHistory() {
+            try {
+                const response = await fetch(ORDER_HISTORY_URL);
+                const data = await response.json();
+
+                if (!data.values || data.values.length < 2) {
+                    document.getElementById('order-history').innerHTML = `
+                        <tr><td colspan="4" class="text-center py-2">No order history available</td></tr>`;
+                    return;
+                }
+
+                const rows = data.values.slice(1);
+                const groupedByInvoice = {};
+
+                rows.forEach(row => {
+                    const [invoiceID, date, product, quantity, price, total] = row;
+                    if (!groupedByInvoice[invoiceID]) {
+                        groupedByInvoice[invoiceID] = { date, total: 0, items: [] };
+                    }
+                    groupedByInvoice[invoiceID].total += parseFloat(total || 0);
+                    groupedByInvoice[invoiceID].items.push({ product, quantity, price, total });
+                });
+                
+                renderOrderHistoryTable(groupedByInvoice);
+
+            } catch (error) {
+                console.error("Error fetching order history:", error);
+            }
+        }
+
+        // Render Order History Table
+        function renderOrderHistoryTable(groupedByInvoice) {
+            const filterDate = document.getElementById('filter-date').value.trim();
+            const searchInvoice = document.getElementById('search-invoice').value.trim().toLowerCase();
+            const historyContainer = document.getElementById('order-history');
+
+            const filteredInvoices = Object.entries(groupedByInvoice).filter(([invoiceID, order]) => {
+                const orderDate = new Date(order.date).toISOString().split('T')[0];
+                const matchesDate = !filterDate || orderDate === filterDate;
+                const matchesInvoice = !searchInvoice || invoiceID.toLowerCase().includes(searchInvoice);
+                return matchesDate && matchesInvoice;
+            });
+
+            if (!filteredInvoices.length) {
+                historyContainer.innerHTML = `
+                    <tr><td colspan="4" class="text-center py-2">No matching orders found</td></tr>`;
+                return;
+            }
+
+            historyContainer.innerHTML = filteredInvoices.map(([invoiceID, order]) => `
+                <tr>
+                    <td class="border px-2 py-1 text-center">${invoiceID}</td>
+                    <td class="border px-2 py-1 text-center">${new Date(order.date).toLocaleDateString()}</td>
+                    <td class="border px-2 py-1 text-center">$${order.total.toFixed(2)}</td>
+                    <td class="border px-2 py-1 text-center">
+                        <button onclick="viewOrderDetails('${invoiceID}')" class="text-blue-500 underline">View</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // View Order Details
+        async function viewOrderDetails(invoiceID) {
+            try {
+                const response = await fetch(ORDER_HISTORY_URL);
+                const data = await response.json();
+
+                if (!data.values || data.values.length < 2) {
+                    alert("No order details available.");
+                    return;
+                }
+
+                const rows = data.values.slice(1);
+                const orderDetails = rows.filter(row => row[0] === invoiceID); 
+
+                if (!orderDetails.length) {
+                    alert("No details found for this invoice.");
+                    return;
+                }
+
+                const modalContent = `
+                    <p><strong>Invoice ID:</strong> ${invoiceID}</p>
+                    <p><strong>Date:</strong> ${orderDetails[0][1]}</p>
+                    <hr class="my-2">
+                    <div class="space-y-2">
+                        ${orderDetails.map(item => `
+                            <div class="flex justify-between">
+                                <span>${item[2]} x${item[3]}</span>
+                                <span>$${(parseFloat(item[4] || 0) * parseInt(item[3] || 0)).toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <hr class="my-2">
+                    <div class="flex justify-between font-bold">
+                        <span>Total:</span>
+                        <span>$${orderDetails.reduce((sum, item) => sum + (parseFloat(item[5] || 0)), 0).toFixed(2)}</span>
+                    </div>
+                `;
+
+                document.getElementById('order-details-content').innerHTML = modalContent;
+                document.getElementById('order-details-modal').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error viewing order details:", error);
+            }
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('order-details-modal').classList.add('hidden');
+        }
+
+        // Handle Search
+        document.getElementById("search-input").addEventListener("input", (event) => {
+            const searchTerm = event.target.value.trim().toLowerCase();
+            const filteredProducts = products.filter(product =>
+                product.name.toLowerCase().includes(searchTerm) ||
+                product.barcode.toLowerCase().includes(searchTerm)
+            );
+            renderFilteredProducts(filteredProducts);
+        });
+        
+        // Real-Time Date and Time
+        function updateDateTime() {
+            const dateElement = document.getElementById('current-date');
+            const timeElement = document.getElementById('current-time');
+            const now = new Date();
+
+            dateElement.textContent = now.toLocaleDateString('en-US', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            timeElement.textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+        }
+        
+        function updateCustomerCart() {
+            const subtotal = Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const tax = subtotal * 0.10;
+            const total = subtotal + tax;
+
+            const cartData = {
+                items: Object.values(cart),
+                subtotal: subtotal.toFixed(2),
+                tax: tax.toFixed(2),
+                total: total.toFixed(2),
+            };
+            cartUpdateChannel.postMessage(cartData);
+        }
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchProducts();
+            fetchOrderHistory();
+            setInterval(updateDateTime, 1000);
+            updateDateTime();
+            renderCart();
+        });
+
+    </script>
+</body>
+
+</html>

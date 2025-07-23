@@ -273,21 +273,21 @@
                         Place Order & Print Receipt
                     </button>
                 </div>
-                <div id="receipt" class="hidden">
-                    <div style="width: 58mm; padding: 2mm; font-family: 'Courier New', monospace; font-size: 10px;">
-                        <h2 style="text-align: center; font-weight: bold; margin: 0;">YB Shop</h2>
-                        <p style="text-align: center; margin: 2px 0;">Invoice ID: <span id="receipt-invoice"></span></p>
-                        <p style="text-align: center; margin: 2px 0;">Date: <span id="receipt-date"></span></p>
-                        <hr style="border-top: 1px dashed #000; margin: 4px 0;">
-                        <div id="receipt-items"></div>
-                        <hr style="border-top: 1px dashed #000; margin: 4px 0;">
-                        <div style="display: flex; justify-content: space-between;"><span>Subtotal:</span> <span id="receipt-subtotal"></span></div>
-                        <div style="display: flex; justify-content: space-between;"><span>Tax:</span> <span id="receipt-tax"></span></div>
-                        <div style="display: flex; justify-content: space-between; font-weight: bold;"><span>Total:</span> <span id="receipt-total"></span></div>
-                        <hr style="border-top: 1px dashed #000; margin: 4px 0;">
-                        <p style="text-align: center; margin-top: 5px;">Thank You!</p>
-                    </div>
-                </div>
+<div id="receipt" class="hidden">
+    <div style="width: 58mm; padding: 5mm; font-family: 'Courier New', monospace; font-size: 14px;">
+        <h2 style="text-align: center; font-weight: bold; margin: 0;">YB Shop</h2>
+        <p style="text-align: center; margin: 5px 0;">Invoice ID: <span id="receipt-invoice"></span></p>
+        <p style="text-align: center; margin: 5px 0;">Date: <span id="receipt-date"></span></p>
+        <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+        <div id="receipt-items"></div>
+        <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+        <div style="display: flex; justify-content: space-between; margin: 5px 0;"><span>Subtotal:</span> <span id="receipt-subtotal"></span></div>
+        <div style="display: flex; justify-content: space-between; margin: 5px 0;"><span>Tax:</span> <span id="receipt-tax"></span></div>
+        <div style="display: flex; justify-content: space-between; font-weight: bold; margin: 5px 0;"><span>Total:</span> <span id="receipt-total"></span></div>
+        <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+        <p style="text-align: center; margin-top: 5px;">Thank You!</p>
+    </div>
+</div>
                 <div id="carousel" class="mt-6">
                     <h2 class="text-lg font-semibold mb-4">Promotional Banners</h2>
                     <div class="relative overflow-hidden">
@@ -552,11 +552,11 @@
             document.getElementById('receipt-date').textContent = date;
 
             const receiptItems = Object.values(cart).map(item => `
-                <div style="display: flex; justify-content: space-between; font-size: 10px;">
-                    <span>${item.name} x${item.quantity}</span>
-                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
-                </div>
-            `).join('');
+        <div style="display: flex; justify-content: space-between; margin: 5px 0;">
+            <span>${item.name} x${item.quantity}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+        </div>
+    `).join('');
 
             document.getElementById('receipt-items').innerHTML = receiptItems;
             document.getElementById('receipt-subtotal').textContent = document.getElementById('subtotal').textContent;
